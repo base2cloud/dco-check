@@ -1,29 +1,17 @@
-name: "CLA Assistant"
-on:
-  issue_comment:
-    types: [created]
-  pull_request_target:
-    types: [opened,closed,synchronize]
-
-# explicitly configure permissions, in case your GITHUB_TOKEN workflow permissions are set to read-only in repository settings
-permissions:
-  actions: write
-  contents: write # this can be 'read' if the signatures are in remote repository
-  pull-requests: write
-  statuses: write
+name: DCO
+on: [pull_request]
 
 jobs:
-  CLAAssistant:
+  commits_check_job:
     runs-on: ubuntu-latest
+    name: Commits Check
     steps:
-      - name: "CLA Assistant"
-        if: (github.event.comment.body == 'recheck' || github.event.comment.body == 'I have read the CLA Document and I hereby sign the CLA') || github.event_name == 'pull_request_target'
-        uses: contributor-assistant/github-action@v2.4.0
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          path-to-signatures: 'signatures/version1/cla.json'
-          path-to-document: 'https://github.com/cla-assistant/github-action/blob/master/SAPCLA.md' # e.g. a CLA or a DCO document
-          branch: 'main'
-          allowlist: bot*
-          use-dco-flag: true
+    - name: Get PR Commits
+      id: 'get-pr-commits'
+      uses: tim-actions/get-pr-commits@master
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+    - name: DCO Check
+      uses: tim-actions/dco@master
+      with:
+        commits: ${{ steps.get-pr-commits.outputs.commits }}
