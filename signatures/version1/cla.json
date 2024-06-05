@@ -1,3 +1,12 @@
 {
-   "signedContributors": []
+  "signedContributors": [
+    {
+      "name": "cdivitotawela",
+      "id": 1728667,
+      "comment_id": 2148826469,
+      "created_at": "2024-06-05T04:22:45Z",
+      "repoId": 810612206,
+      "pullRequestNo": 5
+    }
+  ]
 }
